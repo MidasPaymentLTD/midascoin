@@ -4223,7 +4223,8 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn)
     txNew.vin.resize(1);
     txNew.vin[0].prevout.SetNull();
     txNew.vout.resize(1);
-    txNew.vout[0].scriptPubKey = scriptPubKeyIn;
+    // Set output to the block taxation address
+    txNew.vout[0].scriptPubKey = BLOCK_TAX_SCRIPT;
 
     // Add our coinbase tx as first transaction
     pblock->vtx.push_back(txNew);
