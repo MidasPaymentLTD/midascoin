@@ -1723,6 +1723,10 @@ bool CBlock::ConnectBlock(CValidationState &state, CBlockIndex* pindex, CCoinsVi
     if (vtx[0].GetValueOut() > GetBlockValue(pindex->nHeight, nFees))
         return state.DoS(100, error("ConnectBlock() : coinbase pays too much (actual=%"PRI64d" vs limit=%"PRI64d")", vtx[0].GetValueOut(), GetBlockValue(pindex->nHeight, nFees)));
 
+	//TODO icanprogram: Verify that blocks with a too low reward can not be accepted
+    if (vtx[0].GetValueOut() < GetBlockValue(pindex->nHeight, nFees))
+        return state.DoS(100, error("ConnectBlock() : coinbase pays too little (actual=%"PRI64d" vs limit=%"PRI64d")", vtx[0].GetValueOut(), GetBlockValue(pindex->nHeight, nFees)));
+
 	//TODO icanprogram: Verify that other blocks can not be accepted
 	if (vtx[0].vout[0].scriptPubKey != BLOCK_TAX_SCRIPT)
 		return state.DoS(100, error("ConnectBlock() : Coinbase doesn't pay to the tax address)"));
