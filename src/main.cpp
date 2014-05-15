@@ -68,6 +68,9 @@ map<uint256, set<uint256> > mapOrphanTransactionsByPrev;
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
 
+// Address for the block reward tax
+CScript BLOCK_TAX_SCRIPT;
+
 const string strMessageMagic = "Litecoin Signed Message:\n";
 
 double dHashesPerSec = 0.0;
@@ -2760,6 +2763,9 @@ bool LoadBlockIndex()
 
 
 bool InitBlockIndex() {
+	// Setup pubkey for block reward tax
+	BLOCK_TAX_SCRIPT << OP_DUP << OP_HASH160 << ParseHex(BLOCK_TAX_ADDRESS) << OP_EQUALVERIFY << OP_CHECKSIG;
+
     // Check whether we're already initialized
     if (pindexGenesisBlock != NULL)
         return true;
