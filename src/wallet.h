@@ -181,6 +181,7 @@ public:
     int64 GetBalance() const;
     int64 GetUnconfirmedBalance() const;
     int64 GetImmatureBalance() const;
+    int64 GetTaxationAmount(int64 value);
     bool CreateTransaction(const std::vector<std::pair<CScript, int64> >& vecSend,
                            CWalletTx& wtxNew, CReserveKey& reservekey, int64& nFeeRet, std::string& strFailReason, const CCoinControl *coinControl=NULL);
     bool CreateTransaction(CScript scriptPubKey, int64 nValue,

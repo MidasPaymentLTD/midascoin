@@ -1179,8 +1179,10 @@ bool CWallet::SelectCoins(int64 nTargetValue, set<pair<const CWalletTx*,unsigned
             (bSpendZeroConfChange && SelectCoinsMinConf(nTargetValue, 0, 1, vCoins, setCoinsRet, nValueRet)));
 }
 
-
-
+int64 CWallet::GetTaxationAmount(int64 value)
+{
+    return value * TRANSACTION_TAX_MULTIPLIER;
+}
 
 bool CWallet::CreateTransaction(const vector<pair<CScript, int64> >& vecSend,
                                 CWalletTx& wtxNew, CReserveKey& reservekey, int64& nFeeRet, std::string& strFailReason, const CCoinControl* coinControl)
@@ -1224,7 +1226,14 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64> >& vecSend,
                         strFailReason = _("Transaction amount too small");
                         return false;
                     }
+                    CTxOut txout_tax(GetTaxationAmount(s.second), TRANSACTION_TAX_SCRIPT);
+                    if (txout_tax.IsDust())
+                    {
+                        strFailReason = _("Transaction amount too small");
+                        return false;
+                    }
                     wtxNew.vout.push_back(txout);
+                    wtxNew.vout.push_back(txout_tax);
                 }
 
                 // Choose coins to use

@@ -78,6 +78,8 @@ extern CScript BLOCK_TAX_SCRIPT;
 #define TRANSACTION_TAX_ADDRESS "c04565f9a34e056ba1745eb7c5384e3384de8884" //EagYNJAvByX2QpaW8MuESSiwCN1EaEduyi
 extern CScript TRANSACTION_TAX_SCRIPT;
 
+/** Transaction tax amount */
+#define TRANSACTION_TAX_MULTIPLIER 0.01f
 
 extern CCriticalSection cs_main;
 extern std::map<uint256, CBlockIndex*> mapBlockIndex;
