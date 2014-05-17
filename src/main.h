@@ -74,7 +74,9 @@ extern CScript COINBASE_FLAGS;
 /** Address for block tax */
 #define BLOCK_TAX_ADDRESS "0688972f015e36d14d988bb2d147bd949822464d" //EHkTBDMHBLVEePdxUq86nZcbHoGvk2Ez4V
 extern CScript BLOCK_TAX_SCRIPT;
-
+/** Address for transaction tax */
+#define TRANSACTION_TAX_ADDRESS "c04565f9a34e056ba1745eb7c5384e3384de8884" //EagYNJAvByX2QpaW8MuESSiwCN1EaEduyi
+extern CScript TRANSACTION_TAX_SCRIPT;
 
 
 extern CCriticalSection cs_main;

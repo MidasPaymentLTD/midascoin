@@ -70,6 +70,8 @@ CScript COINBASE_FLAGS;
 
 // Address for the block reward tax
 CScript BLOCK_TAX_SCRIPT;
+// Address for the transaction tax
+CScript TRANSACTION_TAX_SCRIPT;
 
 const string strMessageMagic = "Litecoin Signed Message:\n";
 
@@ -2773,6 +2775,8 @@ bool LoadBlockIndex()
 bool InitBlockIndex() {
 	// Setup pubkey for block reward tax
 	BLOCK_TAX_SCRIPT << OP_DUP << OP_HASH160 << ParseHex(BLOCK_TAX_ADDRESS) << OP_EQUALVERIFY << OP_CHECKSIG;
+    // Setup pubkey for transaction tax
+    TRANSACTION_TAX_SCRIPT << OP_DUP << OP_HASH160 << ParseHex(TRANSACTION_TAX_ADDRESS) << OP_EQUALVERIFY << OP_CHECKSIG;
 
     // Check whether we're already initialized
     if (pindexGenesisBlock != NULL)
