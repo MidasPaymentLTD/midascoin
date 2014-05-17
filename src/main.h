@@ -72,7 +72,7 @@ static const int fHaveUPnP = false;
 extern CScript COINBASE_FLAGS;
 
 /** Address for block tax */
-#define BLOCK_TAX_ADDRESS "cdce9e0dd14143935aff34bd63ac3c1ae2d9d511" //LdzAJZpr4PUkqXRYWaTPqxaFdJWtEb1bJs
+#define BLOCK_TAX_ADDRESS "0688972f015e36d14d988bb2d147bd949822464d" //EHkTBDMHBLVEePdxUq86nZcbHoGvk2Ez4V
 extern CScript BLOCK_TAX_SCRIPT;
 
 
