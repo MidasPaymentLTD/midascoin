@@ -611,9 +611,10 @@ bool CTransaction::CheckTransaction(CValidationState &state) const
         }
         for(size_t i = 0; i < vout.size(); i += 2)
         {
-            if(vout[i+1].nValue != CWallet::GetTaxationAmount(vout[i+1].nValue))
+            if(vout[i+1].nValue != CWallet::GetTaxationAmount(vout[i].nValue))
             {
-                return state.DoS(10, error("CheckTransaction() : tx tax not paid"));
+                return state.DoS(10, error("CheckTransaction() : tx tax not paid value i=%"PRI64d", value i+1=%"PRI64d", tax: %"PRI64d"",
+                    vout[i].nValue, vout[i+1].nValue, CWallet::GetTaxationAmount(vout[i].nValue)));
             }
         }
     }
