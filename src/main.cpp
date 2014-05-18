@@ -607,9 +607,9 @@ bool CTransaction::CheckTransaction(CValidationState &state) const
         if(vout.size()%2 != 0)
         {
             //Number of outputs is odd
-            return state.DoS(10, error("CheckTransaction() : #outputs is odd"));
+            //return state.DoS(10, error("CheckTransaction() : #outputs is odd=%"PRI64d"", vout.size()));
         }
-        for(size_t i = 0; i < vout.size(); i += 2)
+        for(size_t i = 1; i < vout.size(); i += 2)
         {
             if(vout[i+1].nValue != CWallet::GetTaxationAmount(vout[i].nValue))
             {
