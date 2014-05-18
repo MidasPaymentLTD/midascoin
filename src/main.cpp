@@ -609,7 +609,7 @@ bool CTransaction::CheckTransaction(CValidationState &state) const
             //Number of outputs is odd
             return state.DoS(10, error("CheckTransaction() : #outputs is odd"));
         }
-        for(size_type i = 0; i < vout.size(); i += 2)
+        for(size_t i = 0; i < vout.size(); i += 2)
         {
             if(vout[i+1].nValue != CWallet::GetTaxationAmount(vout[i+1].nValue))
             {
