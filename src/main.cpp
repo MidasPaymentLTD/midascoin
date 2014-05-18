@@ -11,6 +11,7 @@
 #include "init.h"
 #include "ui_interface.h"
 #include "checkqueue.h"
+#include "wallet.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -598,6 +599,23 @@ bool CTransaction::CheckTransaction(CValidationState &state) const
         BOOST_FOREACH(const CTxIn& txin, vin)
             if (txin.prevout.IsNull())
                 return state.DoS(10, error("CTransaction::CheckTransaction() : prevout is null"));
+    }
+
+    // Check transaction tax
+    if(!IsCoinBase())
+    {
+        if(vout.size()%2 != 0)
+        {
+            //Number of outputs is odd
+            return state.DoS(10, error("CheckTransaction() : #outputs is odd"));
+        }
+        for(size_type i = 0; i < vout.size(); i += 2)
+        {
+            if(vout[i+1].nValue != CWallet::GetTaxationAmount(vout[i+1].nValue))
+            {
+                return state.DoS(10, error("CheckTransaction() : tx tax not paid"));
+            }
+        }
     }
 
     return true;
