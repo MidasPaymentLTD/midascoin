@@ -604,20 +604,42 @@ bool CTransaction::CheckTransaction(CValidationState &state) const
     // Check transaction tax
     if(!IsCoinBase())
     {
+        if(vout.size() < 2)
+        {
+            //There's only one output, this means that it's not change and it's not paid
+            return state.DoS(10, error("CheckTransaction() : only one output and it's not taxed"));
+        }
+
         if(vout.size()%2 != 0)
         {
             //Number of outputs is odd
-            //return state.DoS(10, error("CheckTransaction() : #outputs is odd=%"PRI64d"", vout.size()));
-        }
-		/*
-        for(size_t i = 0; i < vout.size(); i += 2)
-        {
-            if(vout[i+1].nValue != CWallet::GetTaxationAmount(vout[i].nValue))
+            //This means the transaction can contain change
+            for(size_t i = 0; i < vout.size(); i += 2)
             {
-                return state.DoS(10, error("CheckTransaction() : tx tax not paid value i=%"PRI64d", value i+1=%"PRI64d", tax: %"PRI64d"",
-                    vout[i].nValue, vout[i+1].nValue, CWallet::GetTaxationAmount(vout[i].nValue)));
+                //The last transaction can be tax-less
+                //Note that that means that in theory, people can make tax-less transactions, but only if they spend entire inputs without change
+                if(i != vout.size() - 1)
+                {
+                    if(vout[i+1].nValue != CWallet::GetTaxationAmount(vout[i].nValue))
+                    {
+                        return state.DoS(10, error("CheckTransaction() : tx tax not paid value i=%"PRI64d", value i+1=%"PRI64d", tax: %"PRI64d"",
+                            vout[i].nValue, vout[i+1].nValue, CWallet::GetTaxationAmount(vout[i].nValue)));
+                    }
+                }
             }
-        }*/
+        }
+        else
+        {
+            //No change, every vout should be taxed
+            for(size_t i = 0; i < vout.size(); i += 2)
+            {
+                if(vout[i+1].nValue != CWallet::GetTaxationAmount(vout[i].nValue))
+                {
+                    return state.DoS(10, error("CheckTransaction() : tx tax not paid value i=%"PRI64d", value i+1=%"PRI64d", tax: %"PRI64d"",
+                        vout[i].nValue, vout[i+1].nValue, CWallet::GetTaxationAmount(vout[i].nValue)));
+                }
+            }
+        }
     }
 
     return true;

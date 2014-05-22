@@ -1301,9 +1301,10 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64> >& vecSend,
                     }
                     else
                     {
-                        // Insert change txn at random position:
-                        vector<CTxOut>::iterator position = wtxNew.vout.begin()+GetRandInt(wtxNew.vout.size()+1);
-                        wtxNew.vout.insert(position, newTxOut);
+                        // Note: This makes change obvious, which leads to loss of privacy.
+                        // However, it's necessary to make the distinction here, since not making it would mean the change would be taxed too.
+                        // Insert change txn at the end
+                        wtxNew.vout.push_back(newTxOut);
                     }
                 }
                 else
