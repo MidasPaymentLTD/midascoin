@@ -37,7 +37,7 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("5b907c0c3bbe0fba3e16fcab38bf6b6de2ccd71ec72ebeab53d3d48852568228");
+uint256 hashGenesisBlock("0x5b907c0c3bbe0fba3e16fcab38bf6b6de2ccd71ec72ebeab53d3d48852568228");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // MidasCoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -1973,6 +1973,7 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
       hashBestChain.ToString().c_str(), nBestHeight, log(nBestChainWork.getdouble())/log(2.0), (unsigned long)pindexNew->nChainTx,
       DateTimeStrFormat("%Y-%m-%d %H:%M:%S", pindexBest->GetBlockTime()).c_str(),
       Checkpoints::GuessVerificationProgress(pindexBest));
+	printf("SetBestChain: BLAAAA\n");
 
     // Check the version of the last 100 blocks to see if we need to upgrade:
     if (!fIsInitialDownload)
@@ -1994,10 +1995,14 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
 
     std::string strCmd = GetArg("-blocknotify", "");
 
-    if (!fIsInitialDownload && !strCmd.empty())
+    if (!strCmd.empty())
     {
         boost::replace_all(strCmd, "%s", hashBestChain.GetHex());
+        printf("SetBestChain: Running %s\n", strCmd.c_str());
         boost::thread t(runCommand, strCmd); // thread runs free
+    }else{
+        printf("SetBestChain: check is wrong\n");
+		printf("SetBestChain: fIsInitialDownload=%d, empty=%d\n", fIsInitialDownload, strCmd.empty());
     }
 
     return true;
@@ -2862,7 +2867,7 @@ bool InitBlockIndex() {
         printf("%s\n", hash.ToString().c_str());
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("172e3d086296a8b2d76200005251e08a7bf933dca439ddcd122754ece0f9aa9f"));
+        assert(block.hashMerkleRoot == uint256("0x172e3d086296a8b2d76200005251e08a7bf933dca439ddcd122754ece0f9aa9f"));
         block.print();
         assert(hash == hashGenesisBlock);
 
