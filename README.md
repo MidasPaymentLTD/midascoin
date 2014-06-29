@@ -4,7 +4,7 @@ MidasCoin integration/staging tree
 http://www.midascoin.io
 
 Copyright (c) 2009-2014 Bitcoin Developers
-Copyright (c) 2011-2014 MidasCoin Developers
+Copyright (c) 2011-2014 Midas Payment LTD
 
 What is MidasCoin?
 ----------------
@@ -19,7 +19,7 @@ The rest is the same as Bitcoin.
  - 2016 blocks to retarget difficulty
 
 For more information, as well as an immediately useable, binary version of
-the MidasCoin client sofware, see http://www.midascoin.org.
+the MidasCoin client sofware, see http://www.midascoin.io.
 
 License
 -------
