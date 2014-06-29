@@ -1,7 +1,7 @@
 MidasCoin integration/staging tree
 ================================
 
-http://www.midascoin.org
+http://www.midascoin.io
 
 Copyright (c) 2009-2014 Bitcoin Developers
 Copyright (c) 2011-2014 MidasCoin Developers
