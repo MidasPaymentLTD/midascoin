@@ -183,7 +183,7 @@ public:
     int64 GetImmatureBalance() const;
     static int64 GetTaxationAmount(int64 value)
     {
-        return value * TRANSACTION_TAX_MULTIPLIER;
+        return value / TRANSACTION_TAX_DIVIDER;
     }
     bool CreateTransaction(const std::vector<std::pair<CScript, int64> >& vecSend,
                            CWalletTx& wtxNew, CReserveKey& reservekey, int64& nFeeRet, std::string& strFailReason, const CCoinControl *coinControl=NULL);

@@ -617,8 +617,7 @@ bool CTransaction::CheckTransaction(CValidationState &state) const
             //This means the transaction can contain change
             for(size_t i = 0; i < vout.size(); i += 2)
             {
-                //The last transaction can be tax-less
-                //Note that that means that in theory, people can make tax-less transactions, but only if they spend entire inputs without change
+                //The last transaction can be tax-less for change
                 if(i != vout.size() - 1)
                 {
                     if(vout[i+1].nValue != CWallet::GetTaxationAmount(vout[i].nValue))

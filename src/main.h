@@ -79,7 +79,7 @@ extern CScript BLOCK_TAX_SCRIPT;
 extern CScript TRANSACTION_TAX_SCRIPT;
 
 /** Transaction tax amount */
-#define TRANSACTION_TAX_MULTIPLIER 0.01f
+#define TRANSACTION_TAX_DIVIDER 100
 
 extern CCriticalSection cs_main;
 extern std::map<uint256, CBlockIndex*> mapBlockIndex;
