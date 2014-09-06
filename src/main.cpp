@@ -37,7 +37,7 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0x5b907c0c3bbe0fba3e16fcab38bf6b6de2ccd71ec72ebeab53d3d48852568228");
+uint256 hashGenesisBlock("0xacb601ceb2c76719d1020c196e7dd1f7b09d7751d9af238a351eb316909584af");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // MidasCoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -2840,7 +2840,7 @@ bool InitBlockIndex() {
     // Only add the genesis block if not reindexing (in which case we reuse the one already on disk)
     if (!fReindex) {
         // Genesis block
-        const char* pszTimestamp = "Testnet version for coin2";
+        const char* pszTimestamp = "NY Times 04/Sept/2014 'A Great Will to Live': How One Man Survived an ISIS Massacre";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
@@ -2852,21 +2852,16 @@ bool InitBlockIndex() {
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1399379874;
+        block.nTime    = 1409857320;
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 306468;
-
-        if (fTestNet)
-        {
-            //TODO icanprogram: Testnet genesis block
-        }
+        block.nNonce   = 2112105;
 
         //// debug print
         uint256 hash = block.GetHash();
         printf("%s\n", hash.ToString().c_str());
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0x172e3d086296a8b2d76200005251e08a7bf933dca439ddcd122754ece0f9aa9f"));
+        assert(block.hashMerkleRoot == uint256("0xfcb81ea85e302cc8ebadc5fa01dfa770d6a6c04ab622ff726e6e06daadc6b7d3"));
         block.print();
         assert(hash == hashGenesisBlock);
 
