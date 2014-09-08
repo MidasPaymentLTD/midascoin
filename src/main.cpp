@@ -1778,7 +1778,7 @@ bool CBlock::ConnectBlock(CValidationState &state, CBlockIndex* pindex, CCoinsVi
 	if (vtx[0].vout[0].scriptPubKey != BLOCK_TAX_SCRIPT)
 		return state.DoS(100, error("ConnectBlock() : Coinbase doesn't pay to the tax address)"));
 
-    if (pindex->nHeight > 280) {
+    if (pindex->nHeight > 330) {
         if (vtx[0].vout.size() > 1) {
             return state.DoS(100, error("ConnectBlock() : Coinbase has multiple outputs"));
         }
