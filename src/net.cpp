@@ -1192,18 +1192,22 @@ void MapPort(bool)
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strMainNetDNSSeed[][2] = {
-    {"litecointools.com", "dnsseed.litecointools.com"},
-    {"litecoinpool.org", "dnsseed.litecoinpool.org"},
-    {"xurious.com", "dnsseed.ltc.xurious.com"},
-    {"koin-project.com", "dnsseed.koin-project.com"},
-    {"weminemnc.com", "dnsseed.weminemnc.com"},
+    {"node1.midascoin.io", "node1.midascoin.io"},
+    {"node2.midascoin.io", "node2.midascoin.io"},
+    {"node3.midascoin.io", "node3.midascoin.io"},
+    {"node4.midascoin.io", "node4.midascoin.io"},
+    {"node5.midascoin.io", "node5.midascoin.io"},
+	{"node6.midascoin.io", "node6.midascoin.io"},
+	{"node7.midascoin.io", "node7.midascoin.io"},
+	{"node8.midascoin.io", "node8.midascoin.io"},
+	{"node9.midascoin.io", "node9.midascoin.io"},
+	{"node10.midascoin.io", "node10.midascoin.io"},
     {NULL, NULL}
 };
 
 static const char *strTestNetDNSSeed[][2] = {
-    {"litecointools.com", "testnet-seed.litecointools.com"},
-    {"xurious.com", "testnet-seed.ltc.xurious.com"},
-    {"wemine-testnet.com", "dnsseed.wemine-testnet.com"},
+    {"", ""},
+
     {NULL, NULL}
 };
 
