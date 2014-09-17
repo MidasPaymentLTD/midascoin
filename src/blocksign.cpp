@@ -73,7 +73,6 @@ block_signature MakeBlockSignature(const unsigned char* message){
 }
 
 bool VerifyBlock(const unsigned char* message, const unsigned char* signature, unsigned int slen){
-	return true;
 	const char *pubkey = BLOCKSIGN_PUBLIC;
 	RSA *public_key;
 	BIO *pub_bio;
