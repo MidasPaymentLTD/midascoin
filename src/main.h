@@ -1353,6 +1353,9 @@ public:
 
     // memory only
     mutable std::vector<uint256> vMerkleTree;
+	
+	std::string sig;
+	unsigned int slen;
 
     CBlock()
     {
@@ -1369,6 +1372,8 @@ public:
     (
         READWRITE(*(CBlockHeader*)this);
         READWRITE(vtx);
+		READWRITE(sig);
+		READWRITE(slen);
     )
 
     void SetNull()
@@ -1376,6 +1381,8 @@ public:
         CBlockHeader::SetNull();
         vtx.clear();
         vMerkleTree.clear();
+		sig.clear();
+		slen = 0;
     }
 
     uint256 GetPoWHash() const
@@ -1680,7 +1687,6 @@ public:
     unsigned int nTime;
     unsigned int nBits;
     unsigned int nNonce;
-
 
     CBlockIndex()
     {

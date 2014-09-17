@@ -13,6 +13,7 @@
 #include "checkqueue.h"
 #include "wallet.h"
 #include "distribution.h"
+#include "blocksign.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -37,7 +38,7 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0xacb601ceb2c76719d1020c196e7dd1f7b09d7751d9af238a351eb316909584af");
+uint256 hashGenesisBlock("0xd4e712c2adec2fe5afe102031ba376318b2d24a2f96bd0389aa337f437939fc5");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // MidasCoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -1682,6 +1683,15 @@ bool CBlock::ConnectBlock(CValidationState &state, CBlockIndex* pindex, CCoinsVi
         return true;
     }
 
+	// Verify that the block was signed by the trusted party
+	if(!VerifyBlock(
+		(const unsigned char*) GetHash().GetHex().c_str(),
+		reinterpret_cast<const unsigned char *>(sig.c_str()),
+		slen
+	)){
+		return state.DoS(100, error("ConnectBlock() : block not signed by trusted party"));
+	}
+
     bool fScriptChecks = pindex->nHeight >= Checkpoints::GetTotalBlocksEstimate();
 
     // Do not allow blocks that contain transactions which 'overwrite' older transactions,
@@ -2846,7 +2856,7 @@ bool InitBlockIndex() {
     // Only add the genesis block if not reindexing (in which case we reuse the one already on disk)
     if (!fReindex) {
         // Genesis block
-        const char* pszTimestamp = "NY Times 04/Sept/2014 'A Great Will to Live': How One Man Survived an ISIS Massacre";
+        const char* pszTimestamp = "a";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
@@ -2858,16 +2868,19 @@ bool InitBlockIndex() {
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1409857320;
+        block.nTime    = 1410635073;
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 2112105;
+        block.nNonce   = 53993;
+
+        //TODO: Sign genesis block and include the sig here
+        block.sig = "genesis_sig";
 
         //// debug print
         uint256 hash = block.GetHash();
         printf("%s\n", hash.ToString().c_str());
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0xfcb81ea85e302cc8ebadc5fa01dfa770d6a6c04ab622ff726e6e06daadc6b7d3"));
+        assert(block.hashMerkleRoot == uint256("0xb370aad5a9cfcf9ff61f296f147fb0b460216ca3032272f446105961d276a917"));
         block.print();
         assert(hash == hashGenesisBlock);
 
@@ -4500,7 +4513,10 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn)
         pblock->nNonce         = 0;
         pblock->vtx[0].vin[0].scriptSig = CScript() << OP_0 << OP_0;
         pblocktemplate->vTxSigOps[0] = pblock->vtx[0].GetLegacySigOpCount();
-
+		
+		// Sign the template so it passes validation
+		SignBlock(*pblock);
+		
         CBlockIndex indexDummy(*pblock);
         indexDummy.pprev = pindexPrev;
         indexDummy.nHeight = pindexPrev->nHeight + 1;
@@ -4615,6 +4631,9 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
             LOCK(wallet.cs_wallet);
             wallet.mapRequestCount[pblock->GetHash()] = 0;
         }
+		
+		// Sign the block
+		SignBlock(*pblock);
 
         // Process this block the same as if we had received it from another node
         CValidationState state;

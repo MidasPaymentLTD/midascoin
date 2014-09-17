@@ -5,6 +5,7 @@
 
 #include "main.h"
 #include "bitcoinrpc.h"
+#include "blocksign.h"
 
 using namespace json_spirit;
 using namespace std;
@@ -45,6 +46,12 @@ double GetDifficulty(const CBlockIndex* blockindex)
 
 Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex)
 {
+	bool verified = VerifyBlock(
+		(const unsigned char*) block.GetHash().GetHex().c_str(),
+		reinterpret_cast<const unsigned char *>(block.sig.c_str()),
+		block.slen
+	);
+	
     Object result;
     result.push_back(Pair("hash", block.GetHash().GetHex()));
     CMerkleTx txGen(block.vtx[0]);
@@ -62,6 +69,7 @@ Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex)
     result.push_back(Pair("nonce", (boost::uint64_t)block.nNonce));
     result.push_back(Pair("bits", HexBits(block.nBits)));
     result.push_back(Pair("difficulty", GetDifficulty(blockindex)));
+	result.push_back(Pair("verified", verified ? "yes" : "no"));
 
     if (blockindex->pprev)
         result.push_back(Pair("previousblockhash", blockindex->pprev->GetBlockHash().GetHex()));

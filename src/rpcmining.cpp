@@ -7,6 +7,7 @@
 #include "db.h"
 #include "init.h"
 #include "bitcoinrpc.h"
+#include "blocksign.h"
 
 using namespace json_spirit;
 using namespace std;
@@ -578,6 +579,8 @@ Value submitblock(const Array& params, bool fHelp)
     catch (std::exception &e) {
         throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Block decode failed");
     }
+	//Sign block
+	SignBlock(pblock);
 
     CValidationState state;
     bool fAccepted = ProcessBlock(state, NULL, &pblock);
