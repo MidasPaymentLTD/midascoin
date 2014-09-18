@@ -1559,7 +1559,56 @@ public:
 };
 
 
+class CBlockDefault : public CBlockHeader
+{
+public:
+    // network and disk
+    std::vector<CTransaction> vtx;
 
+    // memory only
+    mutable std::vector<uint256> vMerkleTree;
+
+    CBlockDefault()
+    {
+        SetNull();
+    }
+
+    CBlockDefault(const CBlockHeader &header)
+    {
+        SetNull();
+        *((CBlockHeader*)this) = header;
+    }
+
+    IMPLEMENT_SERIALIZE
+    (
+        READWRITE(*(CBlockHeader*)this);
+        READWRITE(vtx);
+    )
+
+    void SetNull()
+    {
+        CBlockHeader::SetNull();
+        vtx.clear();
+        vMerkleTree.clear();
+    }
+
+    CBlock GetBlock() const
+    {
+        CBlock block;
+        block.nVersion       = nVersion;
+        block.hashPrevBlock  = hashPrevBlock;
+        block.hashMerkleRoot = hashMerkleRoot;
+        block.nTime          = nTime;
+        block.nBits          = nBits;
+        block.nNonce         = nNonce;
+        block.vtx            = vtx;
+        block.vMerkleTree    = vMerkleTree;
+        block.sig            = "";
+        block.slen           = 0;
+        return block;
+    }
+
+};
 
 
 class CBlockFileInfo

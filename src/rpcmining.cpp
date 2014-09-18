@@ -572,15 +572,16 @@ Value submitblock(const Array& params, bool fHelp)
 
     vector<unsigned char> blockData(ParseHex(params[0].get_str()));
     CDataStream ssBlock(blockData, SER_NETWORK, PROTOCOL_VERSION);
-    CBlock pblock;
+    CBlockDefault pdblock;
     try {
-        ssBlock >> pblock;
+        ssBlock >> pdblock;
     }
     catch (std::exception &e) {
         throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Block decode failed");
     }
-	//Sign block
-	SignBlock(pblock);
+    CBlock pblock = pdblock.GetBlock();
+    //Sign block
+    SignBlock(pblock);
 
     CValidationState state;
     bool fAccepted = ProcessBlock(state, NULL, &pblock);
