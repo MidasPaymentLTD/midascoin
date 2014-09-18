@@ -1784,10 +1784,8 @@ bool CBlock::ConnectBlock(CValidationState &state, CBlockIndex* pindex, CCoinsVi
     if (vtx[0].GetValueOut() < GetBlockValue(pindex->nHeight, nFees))
         return state.DoS(100, error("ConnectBlock() : coinbase pays too little (actual=%"PRI64d" vs limit=%"PRI64d")", vtx[0].GetValueOut(), GetBlockValue(pindex->nHeight, nFees)));
 
-    if (pindex->nHeight > 330) {
-        if (vtx[0].vout.size() > 1) {
-            return state.DoS(100, error("ConnectBlock() : Coinbase has multiple outputs"));
-        }
+    if (vtx[0].vout.size() > 1) {
+    	return state.DoS(100, error("ConnectBlock() : Coinbase has multiple outputs"));
     }
 	
     if (!control.Wait())
